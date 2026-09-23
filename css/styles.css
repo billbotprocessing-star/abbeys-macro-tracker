@@ -209,6 +209,7 @@ h1:focus, h2:focus { outline: none; }
 .training-header { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
 .home-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 16px; margin: 16px 0; font-weight: 700; }
 .switch { position: relative; width: 60px; height: 36px; flex: none; border-radius: 999px; border: none; background: var(--line); cursor: pointer; padding: 0; transition: background-color .15s ease; }
+.switch::before { content: ""; position: absolute; inset: -6px; } /* 48px tap area */
 .switch-thumb { position: absolute; top: 4px; left: 4px; width: 28px; height: 28px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .15s ease; }
 .switch[aria-checked="true"] { background: var(--accent); }
 .switch[aria-checked="true"] .switch-thumb { transform: translateX(24px); }
