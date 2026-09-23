@@ -4,6 +4,7 @@
    ========================================================================== */
 
 import { calculateMacros, macroSplit } from './calculator.js';
+import { getDiagnosis } from './diagnosis.js';
 
 /* ---------- Settings you can change ---------- */
 
@@ -193,8 +194,18 @@ function renderResults() {
   const name = state.lead.firstName;
   $('#results-greeting').textContent = name ? `${name}, here's your plan` : "Here's your plan";
 
+  renderIssue(getDiagnosis(state.answers));
   renderMacroCards(macros);
   renderDonut(macros);
+}
+
+/* 1. Your Real Issue */
+function renderIssue(d) {
+  $('#issue').innerHTML = `
+    <p class="eyebrow">Your real issue</p>
+    <h2 id="issue-title">${esc(d.headline)}</h2>
+    <p>${esc(d.explanation)}</p>
+    <p class="issue-fix">${esc(d.fix)}</p>`;
 }
 
 /* 2. Macro targets: four cards + donut */
