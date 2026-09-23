@@ -5,7 +5,7 @@
 
 import { calculateMacros, macroSplit } from './calculator.js';
 import { getDiagnosis } from './diagnosis.js';
-import { buildMealPlan, scaleMeal } from './schedule.js';
+import { buildMealPlan, scaleMeal, buildTrainingPlan } from './schedule.js';
 
 /* ---------- Settings you can change ---------- */
 
@@ -220,6 +220,8 @@ async function renderResults() {
   try {
     const content = await loadContent();
     renderMeals(buildMealPlan(state.answers, macros), content.meals);
+    workoutData = content.workouts;
+    renderTraining();
   } catch (err) {
     console.error(err);
     $('#timeline').innerHTML = '<li class="callout warn">Sorry, the meal and training content could not load. Please refresh the page.</li>';
@@ -377,10 +379,108 @@ function nextMealOption(idx) {
   $('[data-action="next-meal"]', li).focus();
 }
 
+/* 4. Training plan */
+let workoutData = null;
+let trainingPlan = null;
+
+function renderTraining() {
+  trainingPlan = buildTrainingPlan(state.answers, workoutData, view.atHome);
+  $('#training-header').textContent = trainingPlan.header;
+  $('#training-meta').textContent = trainingPlan.meta;
+  $('#home-toggle').setAttribute('aria-checked', String(view.atHome));
+
+  $('#day-tabs').innerHTML = trainingPlan.days.map((day, i) => `
+    <button type="button" class="tab" role="tab" id="tab-${i}" aria-controls="panel-${i}"
+      aria-selected="${i === view.day}" tabindex="${i === view.day ? 0 : -1}" data-day="${i}">
+      ${esc(day.tab)}${day.sub ? `<small>${esc(day.sub)}</small>` : ''}
+    </button>`).join('');
+
+  $('#day-panels').innerHTML = trainingPlan.days.map((day, i) => `
+    <div class="day-panel" role="tabpanel" id="panel-${i}" aria-labelledby="tab-${i}" ${i === view.day ? '' : 'hidden'}>
+      <p class="day-focus">${esc(day.focus)}</p>
+      <ol class="exercise-list">
+        ${day.exercises.map((ex, j) => `
+          <li class="exercise">
+            <div class="exercise-head">
+              <h3 class="exercise-name">${ex.label ? `<span class="superset-tag">${ex.label}</span>` : ''}${esc(ex.name)}</h3>
+              <button type="button" class="btn btn-outline btn-small" data-action="watch" data-day="${i}" data-ex="${j}"
+                aria-label="Watch how: ${esc(ex.name)}">Watch how</button>
+            </div>
+            <dl class="exercise-stats">
+              <div><dt>Sets</dt><dd>${ex.sets}</dd></div>
+              <div><dt>Reps</dt><dd>${esc(ex.reps)}</dd></div>
+              <div><dt>Rest</dt><dd>${esc(ex.rest)}</dd></div>
+            </dl>
+          </li>`).join('')}
+      </ol>
+      ${trainingPlan.finisher ? `
+        <aside class="callout finisher">
+          <h3>${esc(trainingPlan.finisher.title)}</h3>
+          <p>${esc(trainingPlan.finisher.text)}</p>
+        </aside>` : ''}
+    </div>`).join('');
+}
+
+function selectDay(i, { focus = false } = {}) {
+  view.day = i;
+  $$('#day-tabs [role="tab"]').forEach((tab, idx) => {
+    tab.setAttribute('aria-selected', String(idx === i));
+    tab.tabIndex = idx === i ? 0 : -1;
+  });
+  $$('#day-panels [role="tabpanel"]').forEach((panel, idx) => { panel.hidden = idx !== i; });
+  if (focus) $(`#tab-${i}`).focus();
+}
+
+/* "Watch how" modal: looping video, falls back to a placeholder if the clip is missing */
+let lastFocus = null;
+
+function openVideoModal(ex) {
+  lastFocus = document.activeElement;
+  const modal = $('#video-modal');
+  const video = $('#modal-video');
+  const placeholder = $('#video-placeholder');
+
+  $('#modal-title').textContent = ex.name;
+  $('#modal-cues').innerHTML = ex.cues.map((c) => `<li>${esc(c)}</li>`).join('');
+
+  // Show the placeholder until the video actually loads
+  video.hidden = true;
+  placeholder.hidden = false;
+  video.onloadeddata = () => { video.hidden = false; placeholder.hidden = true; video.play().catch(() => {}); };
+  video.onerror = () => { video.hidden = true; placeholder.hidden = false; };
+  video.src = ex.video;
+
+  modal.hidden = false;
+  document.body.classList.add('modal-open');
+  $('.modal-close', modal).focus();
+}
+
+function closeVideoModal() {
+  const modal = $('#video-modal');
+  if (modal.hidden) return;
+  const video = $('#modal-video');
+  video.pause();
+  video.removeAttribute('src');
+  video.load();
+  modal.hidden = true;
+  document.body.classList.remove('modal-open');
+  if (lastFocus) lastFocus.focus();
+}
+
 /* ---------- Events ---------- */
 document.addEventListener('click', (event) => {
   const answer = event.target.closest('.answer');
   if (answer) { chooseAnswer(answer.dataset.key); return; }
+
+  const tab = event.target.closest('[role="tab"][data-day]');
+  if (tab) { selectDay(Number(tab.dataset.day)); return; }
+
+  if (event.target.closest('#home-toggle')) {
+    view.atHome = !view.atHome;
+    renderTraining();
+    $('#home-toggle').focus();
+    return;
+  }
 
   const actionEl = event.target.closest('[data-action]');
   if (!actionEl) return;
@@ -392,16 +492,51 @@ document.addEventListener('click', (event) => {
     case 'back':
       goBack();
       break;
+    case 'watch': {
+      const ex = trainingPlan.days[Number(actionEl.dataset.day)].exercises[Number(actionEl.dataset.ex)];
+      openVideoModal(ex);
+      break;
+    }
+    case 'close-modal':
+      closeVideoModal();
+      break;
     case 'next-meal':
       nextMealOption(Number(actionEl.dataset.idx));
       break;
     case 'retake':
       Object.assign(state, freshState());
       view.mealChoice = {};
+      view.atHome = false;
+      view.day = 0;
       showScreen('quiz');
       break;
     default:
       break;
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  // Modal: Escape closes, Tab stays inside the dialog
+  const modal = $('#video-modal');
+  if (!modal.hidden) {
+    if (event.key === 'Escape') { closeVideoModal(); return; }
+    if (event.key === 'Tab') {
+      const focusable = $$('button, [href], video[controls]', modal).filter((el) => !el.hidden && el.offsetParent !== null);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+    return;
+  }
+  // Tabs: arrow keys move between days
+  const tab = event.target.closest && event.target.closest('[role="tab"][data-day]');
+  if (tab && ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+    event.preventDefault();
+    const count = trainingPlan.days.length;
+    const current = Number(tab.dataset.day);
+    const next = { ArrowLeft: (current - 1 + count) % count, ArrowRight: (current + 1) % count, Home: 0, End: count - 1 }[event.key];
+    selectDay(next, { focus: true });
   }
 });
 

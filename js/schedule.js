@@ -323,7 +323,7 @@ export function buildTrainingPlan(answers, workouts, atHome = false) {
         video: src.video || `videos/${src.slug}.mp4`,
         cues: src.cues || [],
         sets: src.sets || ex.sets,
-        reps: isCore ? (src.coreReps || ex.coreReps || '30–45 sec') : plan.reps,
+        reps: isCore ? (src.coreReps || ex.coreReps || '30–45 sec') : `${plan.reps}${src.perSide ? ' each side' : ''}`,
         rest,
         label,
       };
@@ -336,7 +336,7 @@ export function buildTrainingPlan(answers, workouts, atHome = false) {
     };
   });
 
-  const finisher = scheme.finisher ? (atHome ? level.finisherHome || level.finisher : level.finisher) : null;
+  const finisher = scheme.finisher ? level.finisher : null;
   return {
     header: `Based on your workday: ${timing.header}`,
     levelLabel: level.label,
