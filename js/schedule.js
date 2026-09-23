@@ -319,8 +319,6 @@ export function buildTrainingPlan(answers, workouts, atHome = false) {
       }
       return {
         name: src.name,
-        slug: src.slug,
-        video: src.video || `videos/${src.slug}.mp4`,
         cues: src.cues || [],
         sets: src.sets || ex.sets,
         reps: isCore ? (src.coreReps || ex.coreReps || '30–45 sec') : `${plan.reps}${src.perSide ? ' each side' : ''}`,

@@ -3,8 +3,8 @@
     "Training content for the results page. Edit names, sets and cues freely.",
     "type: 'main' (big lift: 5–8 reps for performance goals), 'accessory', or 'core' (uses coreReps instead of the goal's rep range).",
     "perSide: true adds 'each side' to the reps.",
-    "video: path to the clip, e.g. videos/goblet-squat.mp4. If the file is missing the app shows the form cues with a placeholder.",
-    "home: the dumbbell/bodyweight swap used when 'Training at home?' is switched on (needs name, slug, video, cues)."
+    "cues: 2–3 short form tips, shown under each exercise in a 'Form tips' dropdown.",
+    "home: the dumbbell/bodyweight swap used when 'Training at home?' is switched on (needs name and cues)."
   ],
   "levels": {
     "beginner": {
@@ -19,10 +19,8 @@
           "exercises": [
             {
               "name": "Goblet Squat",
-              "slug": "goblet-squat",
               "type": "main",
               "sets": 3,
-              "video": "videos/goblet-squat.mp4",
               "cues": [
                 "Hold the dumbbell at your chest, elbows tucked.",
                 "Sit between your hips, knees tracking over your toes.",
@@ -30,8 +28,6 @@
               ],
               "home": {
                 "name": "Dumbbell Squat",
-                "slug": "dumbbell-squat",
-                "video": "videos/dumbbell-squat.mp4",
                 "cues": [
                   "Dumbbells at your sides, chest proud.",
                   "Sit back and down until thighs are near parallel.",
@@ -41,10 +37,8 @@
             },
             {
               "name": "Dumbbell Bench Press",
-              "slug": "dumbbell-bench-press",
               "type": "main",
               "sets": 3,
-              "video": "videos/dumbbell-bench-press.mp4",
               "cues": [
                 "Shoulder blades squeezed back and down.",
                 "Lower the dumbbells to mid-chest with elbows at about 45°.",
@@ -52,8 +46,6 @@
               ],
               "home": {
                 "name": "Dumbbell Floor Press",
-                "slug": "dumbbell-floor-press",
-                "video": "videos/dumbbell-floor-press.mp4",
                 "cues": [
                   "Lie on the floor, knees bent.",
                   "Lower until your upper arms touch the floor.",
@@ -63,10 +55,8 @@
             },
             {
               "name": "Seated Cable Row",
-              "slug": "seated-cable-row",
               "type": "accessory",
               "sets": 3,
-              "video": "videos/seated-cable-row.mp4",
               "cues": [
                 "Sit tall with a slight bend in your knees.",
                 "Pull the handle to your belly button.",
@@ -74,8 +64,6 @@
               ],
               "home": {
                 "name": "Dumbbell Bent-Over Row",
-                "slug": "dumbbell-bent-over-row",
-                "video": "videos/dumbbell-bent-over-row.mp4",
                 "cues": [
                   "Hinge forward with a flat back.",
                   "Row the dumbbells toward your hips.",
@@ -85,10 +73,8 @@
             },
             {
               "name": "Dumbbell Romanian Deadlift",
-              "slug": "dumbbell-romanian-deadlift",
               "type": "accessory",
               "sets": 3,
-              "video": "videos/dumbbell-romanian-deadlift.mp4",
               "cues": [
                 "Soft knees, push your hips back.",
                 "Keep the dumbbells close to your legs.",
@@ -96,8 +82,6 @@
               ],
               "home": {
                 "name": "Single-Leg Dumbbell RDL",
-                "slug": "single-leg-dumbbell-rdl",
-                "video": "videos/single-leg-dumbbell-rdl.mp4",
                 "cues": [
                   "Stand on one leg, slight knee bend.",
                   "Hinge forward as the back leg lifts behind you.",
@@ -108,11 +92,9 @@
             },
             {
               "name": "Plank",
-              "slug": "plank",
               "type": "core",
               "sets": 3,
               "coreReps": "30–45 sec",
-              "video": "videos/plank.mp4",
               "cues": [
                 "Elbows under your shoulders.",
                 "Squeeze your glutes and brace your abs.",
@@ -120,8 +102,6 @@
               ],
               "home": {
                 "name": "Plank Shoulder Taps",
-                "slug": "plank-shoulder-taps",
-                "video": "videos/plank-shoulder-taps.mp4",
                 "cues": [
                   "High plank, feet a little wider than hips.",
                   "Tap the opposite shoulder without rocking your hips.",
@@ -136,10 +116,8 @@
           "exercises": [
             {
               "name": "Leg Press",
-              "slug": "leg-press",
               "type": "main",
               "sets": 3,
-              "video": "videos/leg-press.mp4",
               "cues": [
                 "Feet shoulder-width, mid-platform.",
                 "Lower until your knees reach about 90°.",
@@ -147,8 +125,6 @@
               ],
               "home": {
                 "name": "Dumbbell Sumo Squat",
-                "slug": "dumbbell-sumo-squat",
-                "video": "videos/dumbbell-sumo-squat.mp4",
                 "cues": [
                   "Wide stance, toes turned out.",
                   "Hold one dumbbell between your legs.",
@@ -158,10 +134,8 @@
             },
             {
               "name": "Lat Pulldown",
-              "slug": "lat-pulldown",
               "type": "main",
               "sets": 3,
-              "video": "videos/lat-pulldown.mp4",
               "cues": [
                 "Grip just wider than your shoulders.",
                 "Pull the bar to your upper chest, leading with your elbows.",
@@ -169,8 +143,6 @@
               ],
               "home": {
                 "name": "Dumbbell Pullover",
-                "slug": "dumbbell-pullover",
-                "video": "videos/dumbbell-pullover.mp4",
                 "cues": [
                   "Lie on a bench or the floor, one dumbbell over your chest.",
                   "Lower it behind your head with slightly bent arms.",
@@ -180,10 +152,8 @@
             },
             {
               "name": "Dumbbell Shoulder Press",
-              "slug": "dumbbell-shoulder-press",
               "type": "accessory",
               "sets": 3,
-              "video": "videos/dumbbell-shoulder-press.mp4",
               "cues": [
                 "Dumbbells at shoulder height, palms forward.",
                 "Brace your core and don't arch your lower back.",
@@ -191,8 +161,6 @@
               ],
               "home": {
                 "name": "Half-Kneeling Dumbbell Press",
-                "slug": "half-kneeling-dumbbell-press",
-                "video": "videos/half-kneeling-dumbbell-press.mp4",
                 "cues": [
                   "Kneel on one knee, squeeze that glute.",
                   "Press one dumbbell overhead.",
@@ -203,11 +171,9 @@
             },
             {
               "name": "Walking Lunges",
-              "slug": "walking-lunges",
               "type": "accessory",
               "sets": 3,
               "perSide": true,
-              "video": "videos/walking-lunges.mp4",
               "cues": [
                 "Take a long step, keeping your torso tall.",
                 "Lower your back knee toward the floor.",
@@ -215,8 +181,6 @@
               ],
               "home": {
                 "name": "Dumbbell Reverse Lunge",
-                "slug": "dumbbell-reverse-lunge",
-                "video": "videos/dumbbell-reverse-lunge.mp4",
                 "cues": [
                   "Step back and lower your back knee.",
                   "Keep most of your weight in your front heel.",
@@ -226,11 +190,9 @@
             },
             {
               "name": "Dead Bug",
-              "slug": "dead-bug",
               "type": "core",
               "sets": 3,
               "coreReps": "8–10 each side",
-              "video": "videos/dead-bug.mp4",
               "cues": [
                 "Press your lower back into the floor.",
                 "Extend your opposite arm and leg slowly.",
@@ -238,8 +200,6 @@
               ],
               "home": {
                 "name": "Bird Dog",
-                "slug": "bird-dog",
-                "video": "videos/bird-dog.mp4",
                 "cues": [
                   "Hands under shoulders, knees under hips.",
                   "Reach your opposite arm and leg long.",
@@ -254,11 +214,9 @@
           "exercises": [
             {
               "name": "Dumbbell Step-Ups",
-              "slug": "dumbbell-step-ups",
               "type": "accessory",
               "sets": 3,
               "perSide": true,
-              "video": "videos/dumbbell-step-ups.mp4",
               "cues": [
                 "Whole foot on a knee-height box.",
                 "Drive through your front heel to stand tall.",
@@ -266,8 +224,6 @@
               ],
               "home": {
                 "name": "Bodyweight Step-Up",
-                "slug": "bodyweight-step-up",
-                "video": "videos/bodyweight-step-up.mp4",
                 "cues": [
                   "Use a sturdy step or stair.",
                   "Push through the top foot, not the bottom one.",
@@ -277,10 +233,8 @@
             },
             {
               "name": "Incline Dumbbell Press",
-              "slug": "incline-dumbbell-press",
               "type": "main",
               "sets": 3,
-              "video": "videos/incline-dumbbell-press.mp4",
               "cues": [
                 "Set the bench to about 30°.",
                 "Lower the dumbbells to your upper chest.",
@@ -288,8 +242,6 @@
               ],
               "home": {
                 "name": "Incline Push-Up",
-                "slug": "incline-push-up",
-                "video": "videos/incline-push-up.mp4",
                 "cues": [
                   "Hands on a bench, couch or counter.",
                   "Body in one straight line.",
@@ -299,10 +251,8 @@
             },
             {
               "name": "Chest-Supported Dumbbell Row",
-              "slug": "chest-supported-dumbbell-row",
               "type": "main",
               "sets": 3,
-              "video": "videos/chest-supported-dumbbell-row.mp4",
               "cues": [
                 "Chest on an incline bench, feet planted.",
                 "Row your elbows back toward your hips.",
@@ -310,8 +260,6 @@
               ],
               "home": {
                 "name": "Single-Arm Dumbbell Row",
-                "slug": "single-arm-dumbbell-row",
-                "video": "videos/single-arm-dumbbell-row.mp4",
                 "cues": [
                   "One hand and knee on a bench or chair.",
                   "Pull the dumbbell to your hip.",
@@ -322,10 +270,8 @@
             },
             {
               "name": "Glute Bridge",
-              "slug": "glute-bridge",
               "type": "accessory",
               "sets": 3,
-              "video": "videos/glute-bridge.mp4",
               "cues": [
                 "Feet flat, hip-width apart.",
                 "Drive your hips up by squeezing your glutes.",
@@ -333,8 +279,6 @@
               ],
               "home": {
                 "name": "Single-Leg Glute Bridge",
-                "slug": "single-leg-glute-bridge",
-                "video": "videos/single-leg-glute-bridge.mp4",
                 "cues": [
                   "One foot planted, the other leg straight.",
                   "Push through the planted heel.",
@@ -345,11 +289,9 @@
             },
             {
               "name": "Side Plank",
-              "slug": "side-plank",
               "type": "core",
               "sets": 3,
               "coreReps": "20–30 sec each side",
-              "video": "videos/side-plank.mp4",
               "cues": [
                 "Elbow under your shoulder.",
                 "Lift your hips into a straight line.",
@@ -357,8 +299,6 @@
               ],
               "home": {
                 "name": "Side Plank Hip Dips",
-                "slug": "side-plank-hip-dips",
-                "video": "videos/side-plank-hip-dips.mp4",
                 "cues": [
                   "Start in a side plank.",
                   "Lower your hip a few inches, then lift.",
@@ -382,10 +322,8 @@
           "exercises": [
             {
               "name": "Barbell Back Squat",
-              "slug": "barbell-back-squat",
               "type": "main",
               "sets": 4,
-              "video": "videos/barbell-back-squat.mp4",
               "cues": [
                 "Bar on your upper back, grip tight.",
                 "Brace, then sit down between your hips.",
@@ -393,8 +331,6 @@
               ],
               "home": {
                 "name": "Double-Dumbbell Front Squat",
-                "slug": "double-dumbbell-front-squat",
-                "video": "videos/double-dumbbell-front-squat.mp4",
                 "cues": [
                   "Dumbbells on your shoulders, elbows up.",
                   "Squat to at least parallel.",
@@ -404,10 +340,8 @@
             },
             {
               "name": "Barbell Bench Press",
-              "slug": "barbell-bench-press",
               "type": "main",
               "sets": 4,
-              "video": "videos/barbell-bench-press.mp4",
               "cues": [
                 "Eyes under the bar, shoulder blades pinned.",
                 "Lower to your lower chest with control.",
@@ -415,8 +349,6 @@
               ],
               "home": {
                 "name": "Dumbbell Floor Press",
-                "slug": "dumbbell-floor-press",
-                "video": "videos/dumbbell-floor-press.mp4",
                 "cues": [
                   "Lie on the floor, knees bent.",
                   "Lower until your upper arms touch the floor.",
@@ -426,10 +358,8 @@
             },
             {
               "name": "Barbell Row",
-              "slug": "barbell-row",
               "type": "main",
               "sets": 4,
-              "video": "videos/barbell-row.mp4",
               "cues": [
                 "Hinge to about 45°, back flat.",
                 "Pull the bar to your lower ribs.",
@@ -437,8 +367,6 @@
               ],
               "home": {
                 "name": "Dumbbell Bent-Over Row",
-                "slug": "dumbbell-bent-over-row",
-                "video": "videos/dumbbell-bent-over-row.mp4",
                 "cues": [
                   "Hinge forward with a flat back.",
                   "Row the dumbbells toward your hips.",
@@ -448,10 +376,8 @@
             },
             {
               "name": "Romanian Deadlift",
-              "slug": "romanian-deadlift",
               "type": "accessory",
               "sets": 3,
-              "video": "videos/romanian-deadlift.mp4",
               "cues": [
                 "Bar close to your legs, soft knees.",
                 "Push your hips back until your hamstrings are loaded.",
@@ -459,8 +385,6 @@
               ],
               "home": {
                 "name": "Dumbbell Romanian Deadlift",
-                "slug": "dumbbell-romanian-deadlift",
-                "video": "videos/dumbbell-romanian-deadlift.mp4",
                 "cues": [
                   "Soft knees, push your hips back.",
                   "Keep the dumbbells close to your legs.",
@@ -470,11 +394,9 @@
             },
             {
               "name": "Hanging Knee Raise",
-              "slug": "hanging-knee-raise",
               "type": "core",
               "sets": 3,
               "coreReps": "10–15",
-              "video": "videos/hanging-knee-raise.mp4",
               "cues": [
                 "Hang with active shoulders.",
                 "Curl your knees toward your chest.",
@@ -482,8 +404,6 @@
               ],
               "home": {
                 "name": "Lying Leg Raise",
-                "slug": "lying-leg-raise",
-                "video": "videos/lying-leg-raise.mp4",
                 "cues": [
                   "Lower back pressed into the floor.",
                   "Lower your legs as far as you can with your back flat.",
@@ -498,10 +418,8 @@
           "exercises": [
             {
               "name": "Deadlift",
-              "slug": "deadlift",
               "type": "main",
               "sets": 4,
-              "video": "videos/deadlift.mp4",
               "cues": [
                 "Bar over your midfoot, shins close.",
                 "Brace hard and pull the slack out of the bar.",
@@ -509,8 +427,6 @@
               ],
               "home": {
                 "name": "Dumbbell Deadlift",
-                "slug": "dumbbell-deadlift",
-                "video": "videos/dumbbell-deadlift.mp4",
                 "cues": [
                   "Dumbbells at your sides.",
                   "Hinge and bend your knees until the weights reach mid-shin.",
@@ -520,10 +436,8 @@
             },
             {
               "name": "Overhead Press",
-              "slug": "overhead-press",
               "type": "main",
               "sets": 4,
-              "video": "videos/overhead-press.mp4",
               "cues": [
                 "Grip just outside your shoulders, glutes tight.",
                 "Press the bar straight up, moving your head out of the way.",
@@ -531,8 +445,6 @@
               ],
               "home": {
                 "name": "Standing Dumbbell Shoulder Press",
-                "slug": "standing-dumbbell-shoulder-press",
-                "video": "videos/standing-dumbbell-shoulder-press.mp4",
                 "cues": [
                   "Dumbbells at shoulder height.",
                   "Brace and press overhead.",
@@ -542,10 +454,8 @@
             },
             {
               "name": "Pull-Ups",
-              "slug": "pull-ups",
               "type": "main",
               "sets": 4,
-              "video": "videos/pull-ups.mp4",
               "cues": [
                 "Start from a full hang.",
                 "Pull your chest toward the bar, elbows down.",
@@ -553,8 +463,6 @@
               ],
               "home": {
                 "name": "Dumbbell Pullover",
-                "slug": "dumbbell-pullover",
-                "video": "videos/dumbbell-pullover.mp4",
                 "cues": [
                   "Lie on a bench or the floor, one dumbbell over your chest.",
                   "Lower it behind your head with slightly bent arms.",
@@ -564,11 +472,9 @@
             },
             {
               "name": "Bulgarian Split Squat",
-              "slug": "bulgarian-split-squat",
               "type": "accessory",
               "sets": 3,
               "perSide": true,
-              "video": "videos/bulgarian-split-squat.mp4",
               "cues": [
                 "Rear foot on a bench, front foot well forward.",
                 "Lower straight down.",
@@ -576,8 +482,6 @@
               ],
               "home": {
                 "name": "Couch Split Squat",
-                "slug": "couch-split-squat",
-                "video": "videos/couch-split-squat.mp4",
                 "cues": [
                   "Rear foot on the couch or a chair.",
                   "Hold dumbbells at your sides.",
@@ -587,11 +491,9 @@
             },
             {
               "name": "Cable Crunch",
-              "slug": "cable-crunch",
               "type": "core",
               "sets": 3,
               "coreReps": "12–15",
-              "video": "videos/cable-crunch.mp4",
               "cues": [
                 "Kneel holding the rope by your head.",
                 "Crunch your ribs toward your hips.",
@@ -599,8 +501,6 @@
               ],
               "home": {
                 "name": "Weighted Crunch",
-                "slug": "weighted-crunch",
-                "video": "videos/weighted-crunch.mp4",
                 "cues": [
                   "Hold a dumbbell on your chest.",
                   "Curl your shoulders off the floor.",
@@ -615,10 +515,8 @@
           "exercises": [
             {
               "name": "Front Squat",
-              "slug": "front-squat",
               "type": "main",
               "sets": 4,
-              "video": "videos/front-squat.mp4",
               "cues": [
                 "Bar on your front shoulders, elbows high.",
                 "Sit straight down, chest up.",
@@ -626,8 +524,6 @@
               ],
               "home": {
                 "name": "Dumbbell Front Squat",
-                "slug": "dumbbell-front-squat",
-                "video": "videos/dumbbell-front-squat.mp4",
                 "cues": [
                   "Dumbbells on your shoulders, elbows high.",
                   "Squat to at least parallel.",
@@ -637,10 +533,8 @@
             },
             {
               "name": "Incline Dumbbell Press",
-              "slug": "incline-dumbbell-press",
               "type": "main",
               "sets": 4,
-              "video": "videos/incline-dumbbell-press.mp4",
               "cues": [
                 "Set the bench to about 30°.",
                 "Lower the dumbbells to your upper chest.",
@@ -648,8 +542,6 @@
               ],
               "home": {
                 "name": "Feet-Elevated Push-Up",
-                "slug": "feet-elevated-push-up",
-                "video": "videos/feet-elevated-push-up.mp4",
                 "cues": [
                   "Feet on a couch or step, hands on the floor.",
                   "Body in one straight line.",
@@ -659,11 +551,9 @@
             },
             {
               "name": "Single-Arm Dumbbell Row",
-              "slug": "single-arm-dumbbell-row",
               "type": "accessory",
               "sets": 3,
               "perSide": true,
-              "video": "videos/single-arm-dumbbell-row.mp4",
               "cues": [
                 "One hand and knee on a bench.",
                 "Pull the dumbbell to your hip.",
@@ -671,8 +561,6 @@
               ],
               "home": {
                 "name": "Renegade Row",
-                "slug": "renegade-row",
-                "video": "videos/renegade-row.mp4",
                 "cues": [
                   "High plank on two dumbbells.",
                   "Row one side without rotating your hips.",
@@ -682,10 +570,8 @@
             },
             {
               "name": "Hip Thrust",
-              "slug": "hip-thrust",
               "type": "accessory",
               "sets": 3,
-              "video": "videos/hip-thrust.mp4",
               "cues": [
                 "Upper back on the bench, bar over your hips.",
                 "Drive your hips up until your body is flat.",
@@ -693,8 +579,6 @@
               ],
               "home": {
                 "name": "Dumbbell Hip Thrust",
-                "slug": "dumbbell-hip-thrust",
-                "video": "videos/dumbbell-hip-thrust.mp4",
                 "cues": [
                   "Shoulders on the couch, dumbbell on your hips.",
                   "Drive up until your hips are level.",
@@ -704,11 +588,9 @@
             },
             {
               "name": "Farmer Carry",
-              "slug": "farmer-carry",
               "type": "core",
               "sets": 3,
               "coreReps": "30–40 sec walk",
-              "video": "videos/farmer-carry.mp4",
               "cues": [
                 "Heavy dumbbells at your sides.",
                 "Stand tall, shoulders back.",
@@ -716,8 +598,6 @@
               ],
               "home": {
                 "name": "Suitcase Carry",
-                "slug": "suitcase-carry",
-                "video": "videos/suitcase-carry.mp4",
                 "cues": [
                   "One heavy dumbbell in one hand.",
                   "Stay upright and don't lean.",

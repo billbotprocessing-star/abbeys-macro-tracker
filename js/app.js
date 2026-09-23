@@ -408,18 +408,19 @@ function renderTraining() {
     <div class="day-panel" role="tabpanel" id="panel-${i}" aria-labelledby="tab-${i}" ${i === view.day ? '' : 'hidden'}>
       <p class="day-focus">${esc(day.focus)}</p>
       <ol class="exercise-list">
-        ${day.exercises.map((ex, j) => `
+        ${day.exercises.map((ex) => `
           <li class="exercise">
-            <div class="exercise-head">
-              <h3 class="exercise-name">${ex.label ? `<span class="superset-tag">${ex.label}</span>` : ''}${esc(ex.name)}</h3>
-              <button type="button" class="btn btn-outline btn-small" data-action="watch" data-day="${i}" data-ex="${j}"
-                aria-label="Watch how: ${esc(ex.name)}">Watch how</button>
-            </div>
+            <h3 class="exercise-name">${ex.label ? `<span class="superset-tag">${ex.label}</span>` : ''}${esc(ex.name)}</h3>
             <dl class="exercise-stats">
               <div><dt>Sets</dt><dd>${ex.sets}</dd></div>
               <div><dt>Reps</dt><dd>${esc(ex.reps)}</dd></div>
               <div><dt>Rest</dt><dd>${esc(ex.rest)}</dd></div>
             </dl>
+            ${ex.cues.length ? `
+              <details class="cues-toggle">
+                <summary>Form tips</summary>
+                <ul class="cues">${ex.cues.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
+              </details>` : ''}
           </li>`).join('')}
       </ol>
       ${trainingPlan.finisher ? `
@@ -438,42 +439,6 @@ function selectDay(i, { focus = false } = {}) {
   });
   $$('#day-panels [role="tabpanel"]').forEach((panel, idx) => { panel.hidden = idx !== i; });
   if (focus) $(`#tab-${i}`).focus();
-}
-
-/* "Watch how" modal: looping video, falls back to a placeholder if the clip is missing */
-let lastFocus = null;
-
-function openVideoModal(ex) {
-  lastFocus = document.activeElement;
-  const modal = $('#video-modal');
-  const video = $('#modal-video');
-  const placeholder = $('#video-placeholder');
-
-  $('#modal-title').textContent = ex.name;
-  $('#modal-cues').innerHTML = ex.cues.map((c) => `<li>${esc(c)}</li>`).join('');
-
-  // Show the placeholder until the video actually loads
-  video.hidden = true;
-  placeholder.hidden = false;
-  video.onloadeddata = () => { video.hidden = false; placeholder.hidden = true; video.play().catch(() => {}); };
-  video.onerror = () => { video.hidden = true; placeholder.hidden = false; };
-  video.src = ex.video;
-
-  modal.hidden = false;
-  document.body.classList.add('modal-open');
-  $('.modal-close', modal).focus();
-}
-
-function closeVideoModal() {
-  const modal = $('#video-modal');
-  if (modal.hidden) return;
-  const video = $('#modal-video');
-  video.pause();
-  video.removeAttribute('src');
-  video.load();
-  modal.hidden = true;
-  document.body.classList.remove('modal-open');
-  if (lastFocus) lastFocus.focus();
 }
 
 /* 5. Discovery call CTA + Calendly */
@@ -638,14 +603,6 @@ document.addEventListener('click', (event) => {
     case 'back':
       goBack();
       break;
-    case 'watch': {
-      const ex = trainingPlan.days[Number(actionEl.dataset.day)].exercises[Number(actionEl.dataset.ex)];
-      openVideoModal(ex);
-      break;
-    }
-    case 'close-modal':
-      closeVideoModal();
-      break;
     case 'next-meal':
       nextMealOption(Number(actionEl.dataset.idx));
       break;
@@ -662,19 +619,6 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
-  // Modal: Escape closes, Tab stays inside the dialog
-  const modal = $('#video-modal');
-  if (!modal.hidden) {
-    if (event.key === 'Escape') { closeVideoModal(); return; }
-    if (event.key === 'Tab') {
-      const focusable = $$('button, [href], video[controls]', modal).filter((el) => !el.hidden && el.offsetParent !== null);
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    }
-    return;
-  }
   // Tabs: arrow keys move between days
   const tab = event.target.closest && event.target.closest('[role="tab"][data-day]');
   if (tab && ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {

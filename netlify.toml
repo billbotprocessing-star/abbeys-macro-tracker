@@ -28,9 +28,3 @@
   for = "/css/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
-
-# Videos are big and rarely change: cache for a week
-[[headers]]
-  for = "/videos/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"

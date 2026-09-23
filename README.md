@@ -5,7 +5,7 @@ A mobile-first macro calculator for **Thisisabbs**. Visitors answer 5 quick ques
 1. **Your Real Issue**, a diagnosis based on their biggest struggle and goal
 2. **Macro targets**: calories, protein, carbs and fat, plus a donut chart
 3. **Meal timing and what to eat**, built around their workday, with portions scaled to their targets
-4. **A 3-day training plan** with "Watch how" videos and a "Training at home?" swap
+4. **A 3-day training plan** with form tips and a "Training at home?" swap
 5. **A discovery-call booking** (Calendly), prefilled with their answers
 
 It's plain HTML, CSS and JavaScript: no framework, no build step. Every calculation runs in the browser. Leads are collected with **Netlify Forms**.
@@ -15,7 +15,7 @@ It's plain HTML, CSS and JavaScript: no framework, no build step. Every calculat
 ## Files
 
 ```
-index.html          All screens, the hidden Netlify form, and the video modal
+index.html          All screens and the hidden Netlify form
 guarantee.html      Results guarantee page (placeholder terms: fill these in)
 netlify.toml        Netlify settings (no build, cache and security headers)
 css/styles.css      All styles. Brand colours and font are at the top.
@@ -24,8 +24,7 @@ js/calculator.js    Macro math
 js/diagnosis.js     "Your Real Issue" wording
 js/schedule.js      Meal timing rules, portion scaling, training plan rules
 data/meals.json     Sample meals (edit freely)
-data/workouts.json  Exercises, cues, videos, home swaps (edit freely)
-videos/             Exercise clips, named [exercise-slug].mp4
+data/workouts.json  Exercises, form tips, home swaps (edit freely)
 ```
 
 ---
@@ -99,33 +98,18 @@ Two levels (`beginner`, `intermediate`), each with 3 days of 5 exercises:
 ```json
 {
   "name": "Goblet Squat",
-  "slug": "goblet-squat",
   "type": "main",
   "sets": 3,
-  "video": "videos/goblet-squat.mp4",
   "cues": ["Hold the dumbbell at your chest.", "Sit between your hips.", "Drive through your whole foot."],
-  "home": { "name": "Dumbbell Squat", "slug": "dumbbell-squat", "video": "videos/dumbbell-squat.mp4", "cues": ["..."] }
+  "home": { "name": "Dumbbell Squat", "cues": ["..."] }
 }
 ```
 
 - `type`: `main` (big lifts: 5–8 reps for the performance goal), `accessory`, or `core` (uses `coreReps`, e.g. `"30–45 sec"`).
 - `perSide: true` adds "each side" to the reps.
+- `cues` are 2–3 short form tips, shown in a "Form tips" dropdown under each exercise.
 - `home` is the dumbbell or bodyweight swap shown when "Training at home?" is on.
 - Each level's `finisher` is the 5-minute finisher shown for the fat-loss and tone goals.
-
-### Adding exercise videos
-
-Save each clip in `videos/` named after its slug, e.g. `videos/goblet-squat.mp4`. Short (5–15 s), silent, looping MP4s (H.264) under about 3 MB work best on phones. If a file is missing, the modal shows the form cues with a "Video coming soon" placeholder, so you can add videos one at a time.
-
-<details>
-<summary>All 54 video file names</summary>
-
-Gym: `goblet-squat`, `dumbbell-bench-press`, `seated-cable-row`, `dumbbell-romanian-deadlift`, `plank`, `leg-press`, `lat-pulldown`, `dumbbell-shoulder-press`, `walking-lunges`, `dead-bug`, `dumbbell-step-ups`, `incline-dumbbell-press`, `chest-supported-dumbbell-row`, `glute-bridge`, `side-plank`, `barbell-back-squat`, `barbell-bench-press`, `barbell-row`, `romanian-deadlift`, `hanging-knee-raise`, `deadlift`, `overhead-press`, `pull-ups`, `bulgarian-split-squat`, `cable-crunch`, `front-squat`, `single-arm-dumbbell-row`, `hip-thrust`, `farmer-carry`
-
-Home: `dumbbell-squat`, `dumbbell-floor-press`, `dumbbell-bent-over-row`, `single-leg-dumbbell-rdl`, `plank-shoulder-taps`, `dumbbell-sumo-squat`, `dumbbell-pullover`, `half-kneeling-dumbbell-press`, `dumbbell-reverse-lunge`, `bird-dog`, `bodyweight-step-up`, `incline-push-up`, `single-leg-glute-bridge`, `side-plank-hip-dips`, `double-dumbbell-front-squat`, `lying-leg-raise`, `dumbbell-deadlift`, `standing-dumbbell-shoulder-press`, `couch-split-squat`, `weighted-crunch`, `dumbbell-front-squat`, `feet-elevated-push-up`, `renegade-row`, `dumbbell-hip-thrust`, `suitcase-carry`
-
-(Each is `videos/<name>.mp4`.)
-</details>
 
 ### Other wording
 

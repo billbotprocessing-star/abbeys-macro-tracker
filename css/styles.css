@@ -231,13 +231,19 @@ h1:focus, h2:focus { outline: none; }
 .day-focus { font-weight: 700; color: var(--ink-2); margin-bottom: 12px; }
 .exercise-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .exercise { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; }
-.exercise-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .exercise-name { margin: 0; font-size: 1.05rem; }
 .superset-tag { display: inline-block; font-size: .75rem; font-weight: 800; background: var(--primary); color: var(--on-dark); border-radius: 6px; padding: 2px 7px; margin-right: 6px; vertical-align: 2px; }
 .exercise-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0 0; }
 .exercise-stats div { background: var(--bg); border-radius: var(--radius-sm); padding: 8px 10px; }
 .exercise-stats dt { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
 .exercise-stats dd { margin: 0; font-weight: 800; font-size: .95rem; }
+.cues-toggle { margin-top: 10px; }
+.cues-toggle summary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--ink-2); cursor: pointer; list-style: none; }
+.cues-toggle summary::-webkit-details-marker { display: none; }
+.cues-toggle summary::before { content: "+"; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--secondary); font-weight: 800; line-height: 1; }
+.cues-toggle[open] summary::before { content: "−"; }
+.cues { margin: 0 0 4px; padding-left: 20px; color: var(--ink-2); }
+.cues li { margin-bottom: 4px; }
 .finisher { margin-top: 12px; }
 
 /* 5. CTA */
@@ -253,34 +259,11 @@ h1:focus, h2:focus { outline: none; }
 .calendly-placeholder code { background: var(--secondary); padding: 2px 6px; border-radius: 4px; }
 .retake { text-align: center; margin-top: 32px; }
 
-/* ---------- Modal ---------- */
-.modal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
-.modal-backdrop { position: absolute; inset: 0; background: var(--backdrop); }
-.modal-dialog {
-  position: relative; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto;
-  background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 20px 20px 28px;
-  animation: slide-up .22s ease;
-}
-@keyframes slide-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
-.modal-title { padding-right: 48px; }
-.modal-close { position: absolute; top: 10px; right: 10px; width: 48px; height: 48px; border: none; border-radius: 50%; background: var(--secondary); font-size: 1.6rem; line-height: 1; cursor: pointer; color: var(--ink); }
-.video-frame { aspect-ratio: 16 / 9; border-radius: var(--radius-sm); overflow: hidden; background: var(--primary); margin-bottom: 16px; }
-.video-frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.video-placeholder { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--on-dark-2); font-weight: 600; }
-.play-icon { width: 56px; height: 56px; border-radius: 50%; border: 3px solid rgba(255,255,255,.6); position: relative; }
-.play-icon::after { content: ""; position: absolute; left: 21px; top: 15px; border-style: solid; border-width: 10px 0 10px 16px; border-color: transparent transparent transparent rgba(255,255,255,.8); }
-.cues-title { margin-top: 4px; }
-.cues { margin: 0; padding-left: 20px; }
-.cues li { margin-bottom: 6px; }
-body.modal-open { overflow: hidden; }
-
 /* ---------- Larger screens ---------- */
 @media (min-width: 640px) {
   .screen { padding-top: 48px; }
   .macro-grid { grid-template-columns: repeat(4, 1fr); }
   .macro-card.cal { grid-column: auto; }
-  .modal { align-items: center; }
-  .modal-dialog { border-radius: var(--radius); }
   .card, .cta { padding: 28px; }
 }
 
