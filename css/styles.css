@@ -238,6 +238,7 @@ h1:focus, h2:focus { outline: none; }
 .program-list a { font-weight: 600; }
 .calendly-inline-widget { min-width: 280px; height: 700px; border-radius: var(--radius); overflow: hidden; background: var(--surface); }
 .calendly-placeholder { background: var(--surface); border: 2px dashed var(--line); border-radius: var(--radius); padding: 20px; text-align: center; }
+.calendly-fallback { font-size: .9rem; margin: 10px 0 0; text-align: center; }
 .calendly-placeholder code { background: var(--secondary); padding: 2px 6px; border-radius: 4px; }
 .retake { text-align: center; margin-top: 32px; }
 

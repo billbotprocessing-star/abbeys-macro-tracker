@@ -16,6 +16,10 @@ export const EMAIL_GATE = true;
 // Name of the Netlify form (must match the hidden form in index.html).
 const FORM_NAME = 'macro-leads';
 
+// Your Calendly event link, e.g. 'https://calendly.com/thisisabbs/discovery-call'.
+// Until this is set, the results page shows a placeholder instead of the booking calendar.
+const CALENDLY_URL = '[YOUR CALENDLY LINK]';
+
 /* ---------- Assessment questions ---------- */
 // Each option has a key (A, B, C…) used by the calculator and rules,
 // and a label shown to the user (and sent to Netlify / Calendly).
@@ -140,6 +144,10 @@ function showScreen(name, { focus = true } = {}) {
   $$('[data-screen]').forEach((el) => { el.hidden = el.dataset.screen !== name; });
 
   if (name === 'quiz') renderQuestion();
+  if (name === 'email') {
+    $('#first_name').value = state.lead.firstName || '';
+    $('#email').value = state.lead.email || '';
+  }
   if (name === 'results') renderResults();
 
   window.scrollTo(0, 0);
@@ -216,6 +224,7 @@ async function renderResults() {
   renderIssue(getDiagnosis(state.answers));
   renderMacroCards(macros);
   renderDonut(macros);
+  renderCta(macros);
 
   try {
     const content = await loadContent();
@@ -467,6 +476,143 @@ function closeVideoModal() {
   if (lastFocus) lastFocus.focus();
 }
 
+/* 5. Discovery call CTA + Calendly */
+function renderCta(macros) {
+  const { struggle, workday } = state.answers;
+  const reasons = [];
+  if (struggle === 'E') reasons.push("You're doing everything right and still stuck, and that's exactly when coaching pays off most: your numbers get recalculated every 2 weeks, so your body never gets the chance to adapt and stall.");
+  if (workday === 'D') reasons.push("With long, unpredictable hours, a fixed plan breaks fast. Weekly check-ins adjust your meals and training to the week you actually have.");
+  const why = $('#cta-why');
+  why.hidden = !reasons.length;
+  why.textContent = reasons.join(' ');
+
+  const slot = $('#calendly-slot');
+  if (!/^https:\/\/calendly\.com\//.test(CALENDLY_URL)) {
+    slot.innerHTML = `
+      <div class="calendly-placeholder">
+        <p><strong>Booking calendar goes here.</strong></p>
+        <p class="muted">Set <code>CALENDLY_URL</code> in <code>js/app.js</code> to show your Calendly scheduler.</p>
+      </div>`;
+    return;
+  }
+
+  const prefill = calendlyPrefill(macros);
+  slot.innerHTML = `
+    <div class="calendly-inline-widget" id="calendly-embed"></div>
+    <p class="calendly-fallback muted">Calendar not loading? <a href="${esc(calendlyLink(prefill))}" target="_blank" rel="noopener">Open the booking page</a>.</p>`;
+  loadCalendly().then(() => {
+    window.Calendly.initInlineWidget({
+      url: `${CALENDLY_URL}?hide_gdpr_banner=1`,
+      parentElement: $('#calendly-embed'),
+      prefill,
+    });
+  }).catch(() => { /* fallback link is already on the page */ });
+}
+
+/**
+ * Calendly prefill. Name and email are native fields. Goal, struggle, workday and
+ * macros go into custom questions a1–a4: add four questions to your Calendly event,
+ * in this order, for them to show up (see README).
+ */
+function calendlyPrefill(m) {
+  const a = state.answers;
+  return {
+    name: state.lead.firstName || '',
+    email: state.lead.email || '',
+    customAnswers: {
+      a1: answerLabel('goal', a.goal),
+      a2: answerLabel('struggle', a.struggle),
+      a3: answerLabel('workday', a.workday),
+      a4: `${m.calories} kcal · ${m.protein} g protein · ${m.carbs} g carbs · ${m.fat} g fat`,
+    },
+  };
+}
+
+function calendlyLink(prefill) {
+  const params = new URLSearchParams({ name: prefill.name, email: prefill.email, ...prefill.customAnswers });
+  return `${CALENDLY_URL}?${params}`;
+}
+
+let calendlyPromise = null;
+function loadCalendly() {
+  if (window.Calendly) return Promise.resolve();
+  if (!calendlyPromise) {
+    calendlyPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+  return calendlyPromise;
+}
+
+/* ---------- Email capture (Netlify Forms) ---------- */
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+async function submitLead(form) {
+  const firstName = form.first_name.value.trim();
+  const email = form.email.value.trim();
+
+  // Validate
+  const errors = { first_name: !firstName, email: !EMAIL_PATTERN.test(email) };
+  Object.entries(errors).forEach(([field, bad]) => {
+    form[field].setAttribute('aria-invalid', String(bad));
+    form[field].setAttribute('aria-describedby', bad ? `${field}-error` : '');
+    $(`#${field}-error`).hidden = !bad;
+  });
+  const firstBad = Object.keys(errors).find((k) => errors[k]);
+  if (firstBad) { form[firstBad].focus(); return; }
+
+  state.lead = { firstName, email };
+  saveState();
+
+  const button = $('button[type="submit"]', form);
+  button.disabled = true;
+  button.textContent = 'Building your plan…';
+
+  // Honeypot filled in → a bot. Skip the submission but don't tell it.
+  if (!form['bot-field'].value) {
+    const m = calculateMacros(state.answers);
+    const a = state.answers;
+    const body = new URLSearchParams({
+      'form-name': FORM_NAME,
+      first_name: firstName,
+      email,
+      goal: answerLabel('goal', a.goal),
+      weight: answerLabel('weight', a.weight),
+      activity: answerLabel('activity', a.activity),
+      struggle: answerLabel('struggle', a.struggle),
+      workday: answerLabel('workday', a.workday),
+      calories: String(m.calories),
+      protein_g: String(m.protein),
+      carbs_g: String(m.carbs),
+      fat_g: String(m.fat),
+    });
+    try {
+      // Don't make people wait on a slow network — give up after 5 seconds
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (!res.ok) console.warn(`Lead form returned ${res.status}. Netlify Forms only works on the deployed site.`);
+    } catch (err) {
+      console.warn('Lead form could not be sent:', err);
+    }
+  }
+
+  button.disabled = false;
+  button.textContent = 'Show my plan';
+  showScreen('results');
+}
+
 /* ---------- Events ---------- */
 document.addEventListener('click', (event) => {
   const answer = event.target.closest('.answer');
@@ -538,6 +684,11 @@ document.addEventListener('keydown', (event) => {
     const next = { ArrowLeft: (current - 1 + count) % count, ArrowRight: (current + 1) % count, Home: 0, End: count - 1 }[event.key];
     selectDay(next, { focus: true });
   }
+});
+
+$('#lead-form').addEventListener('submit', (event) => {
+  event.preventDefault();
+  submitLead(event.currentTarget);
 });
 
 /* ---------- Boot ---------- */
