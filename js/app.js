@@ -16,9 +16,9 @@ export const EMAIL_GATE = true;
 // Name of the Netlify form (must match the hidden form in index.html).
 const FORM_NAME = 'macro-leads';
 
-// Your Calendly event link, e.g. 'https://calendly.com/thisisabbs/discovery-call'.
-// Until this is set, the results page shows a placeholder instead of the booking calendar.
-const CALENDLY_URL = '[YOUR CALENDLY LINK]';
+// Your Calendly event link. If this is blank or not a calendly.com link,
+// the results page shows a placeholder instead of the booking calendar.
+const CALENDLY_URL = 'https://calendly.com/builtbyabbs/kickstart-call-built-by-abbs';
 
 /* ---------- Assessment questions ---------- */
 // Each option has a key (A, B, C…) used by the calculator and rules,

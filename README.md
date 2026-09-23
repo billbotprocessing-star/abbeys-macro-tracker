@@ -52,7 +52,7 @@ The simplest setup is to connect this GitHub repo, so every push redeploys autom
 | Setting | What it does |
 |---|---|
 | `EMAIL_GATE = true` | Shows "Where should we send your plan?" before the results. Set it to `false` to skip straight to results (no lead is captured). |
-| `CALENDLY_URL` | Your Calendly event link, e.g. `'https://calendly.com/thisisabbs/discovery-call'`. Until it's set, the results page shows a placeholder box. |
+| `CALENDLY_URL` | Your Calendly event link. Currently `https://calendly.com/builtbyabbs/kickstart-call-built-by-abbs`. If it's blank, the results page shows a placeholder box. |
 
 ### Calendly prefill
 
@@ -140,12 +140,12 @@ Home: `dumbbell-squat`, `dumbbell-floor-press`, `dumbbell-bent-over-row`, `singl
 At the top of `css/styles.css`:
 
 ```css
---primary: #14213D;   /* deep navy */
---secondary: #E8EFE6; /* soft sage */
---accent: #FF6B4A;    /* coral */
+--primary: #1F1F1F;   /* charcoal */
+--secondary: #F1EEEA; /* warm light grey */
+--accent: #7D6B5A;    /* taupe */
 ```
 
-Buttons use the accent colour with `--accent-ink` text, so keep that pair high-contrast if you change them. To change the font, swap the Google Fonts `<link>` in `index.html` and `guarantee.html`, and update `--font`.
+The palette is intentionally neutral. Buttons use the accent colour with `--accent-ink` (white) text, so keep that pair high-contrast if you change them. The blue, orange and gold on the macro cards and donut (`--c-protein`, `--c-carbs`, `--c-fat`) are data colours, not brand colours: they were chosen so protein, carbs and fat stay easy to tell apart, including for colour-blind visitors. To change the font, swap the Google Fonts `<link>` in `index.html` and `guarantee.html`, and update `--font`.
 
 ---
 
