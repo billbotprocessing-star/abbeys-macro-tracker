@@ -3,6 +3,8 @@
    Screens: intro → quiz (5 questions) → email (optional) → results
    ========================================================================== */
 
+import { calculateMacros, macroSplit } from './calculator.js';
+
 /* ---------- Settings you can change ---------- */
 
 // Show the "Where should we send your plan?" step before results.
@@ -187,7 +189,65 @@ function finishQuiz() {
 
 /* ---------- Results ---------- */
 function renderResults() {
-  // Filled in by the calculator / results steps
+  const macros = calculateMacros(state.answers);
+  const name = state.lead.firstName;
+  $('#results-greeting').textContent = name ? `${name}, here's your plan` : "Here's your plan";
+
+  renderMacroCards(macros);
+  renderDonut(macros);
+}
+
+/* 2. Macro targets: four cards + donut */
+function renderMacroCards(m) {
+  const cards = [
+    { cls: 'cal', label: 'Calories', value: m.calories.toLocaleString(), unit: 'kcal', sub: 'per day' },
+    { cls: 'protein', label: 'Protein', value: m.protein, unit: 'g', sub: `${m.protein * 4} kcal` },
+    { cls: 'carbs', label: 'Carbs', value: m.carbs, unit: 'g', sub: `${m.carbs * 4} kcal` },
+    { cls: 'fat', label: 'Fat', value: m.fat, unit: 'g', sub: `${m.fat * 9} kcal` },
+  ];
+  $('#macro-cards').innerHTML = cards.map((c) => `
+    <div class="macro-card ${c.cls}">
+      <div class="macro-label">${c.label}</div>
+      <div class="macro-value">${c.value}<span class="macro-unit">${c.unit}</span></div>
+      <div class="macro-sub">${c.sub}</div>
+    </div>`).join('');
+}
+
+function renderDonut(m) {
+  const split = macroSplit(m);
+  const parts = [
+    { key: 'protein', label: 'Protein', color: 'var(--c-protein)', grams: m.protein },
+    { key: 'carbs', label: 'Carbs', color: 'var(--c-carbs)', grams: m.carbs },
+    { key: 'fat', label: 'Fat', color: 'var(--c-fat)', grams: m.fat },
+  ];
+  // Donut drawn with stroke-dasharray on circles (circumference = 100 units)
+  const r = 15.9155;
+  const gap = 1.2; // small surface-coloured gap between segments
+  let offset = 25; // start at 12 o'clock
+  const arcs = parts.map((p) => {
+    const len = split[p.key] * 100;
+    const drawn = Math.max(0, len - gap);
+    const arc = `<circle cx="21" cy="21" r="${r}" fill="none" stroke="${p.color}" stroke-width="6"
+      stroke-dasharray="${drawn.toFixed(2)} ${(100 - drawn).toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"></circle>`;
+    offset -= len;
+    return arc;
+  }).join('');
+
+  const pct = (k) => Math.round(split[k] * 100);
+  const summary = parts.map((p) => `${p.label} ${pct(p.key)}%`).join(', ');
+  $('#macro-donut').innerHTML = `
+    <svg class="donut" viewBox="0 0 42 42" role="img" aria-label="Calorie split: ${summary}">
+      <circle cx="21" cy="21" r="${r}" fill="none" stroke="var(--line)" stroke-width="6"></circle>
+      ${arcs}
+      <text x="21" y="20.5" text-anchor="middle" font-size="5.2" font-weight="800" fill="var(--ink)">${m.calories.toLocaleString()}</text>
+      <text x="21" y="26" text-anchor="middle" font-size="3.2" font-weight="600" fill="var(--muted)">kcal / day</text>
+    </svg>
+    <div>
+      <ul class="donut-legend">
+        ${parts.map((p) => `<li><span class="swatch" style="background:${p.color}"></span><span><strong>${pct(p.key)}%</strong> ${p.label} · <span class="nowrap">${p.grams} g</span></span></li>`).join('')}
+      </ul>
+      <figcaption class="donut-caption">Share of daily calories</figcaption>
+    </div>`;
 }
 
 /* ---------- Events ---------- */

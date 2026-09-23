@@ -156,20 +156,23 @@ h1:focus, h2:focus { outline: none; }
 .issue .issue-fix { color: #fff; font-weight: 700; border-left: 4px solid var(--accent); padding-left: 12px; margin-bottom: 0; }
 
 /* 2. Macro cards + donut */
-.macro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.macro-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; border-top: 5px solid var(--line); }
+.macro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.macro-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 12px; border-top: 5px solid var(--line); min-width: 0; }
+.macro-card.cal { padding: 16px; }
 .macro-card.cal { grid-column: 1 / -1; border-top-color: var(--primary); }
+.macro-card.cal .macro-value { font-size: clamp(2.2rem, 11vw, 2.6rem); }
 .macro-card.protein { border-top-color: var(--c-protein); }
 .macro-card.carbs { border-top-color: var(--c-carbs); }
 .macro-card.fat { border-top-color: var(--c-fat); }
 .macro-label { font-size: .85rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-.macro-value { font-size: clamp(1.9rem, 9vw, 2.6rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; }
+.macro-value { font-size: clamp(1.55rem, 7.5vw, 2.6rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; }
 .macro-unit { font-size: 1rem; font-weight: 700; color: var(--muted); margin-left: 2px; }
 .macro-sub { font-size: .85rem; color: var(--muted); }
 .donut-wrap { margin: 20px 0 0; display: flex; align-items: center; gap: 20px; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; }
 .donut { width: 132px; height: 132px; flex: none; }
 .donut-legend { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; font-size: .95rem; }
 .donut-legend li { display: flex; align-items: center; gap: 10px; }
+.donut-legend .nowrap { white-space: nowrap; }
 .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
 .donut-legend strong { font-weight: 800; }
 .donut-caption { font-size: .8rem; color: var(--muted); margin-top: 4px; }
