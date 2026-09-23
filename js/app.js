@@ -5,6 +5,7 @@
 
 import { calculateMacros, macroSplit } from './calculator.js';
 import { getDiagnosis } from './diagnosis.js';
+import { buildMealPlan, scaleMeal } from './schedule.js';
 
 /* ---------- Settings you can change ---------- */
 
@@ -105,6 +106,24 @@ function saveState() {
   try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* private mode — ignore */ }
 }
 
+/* ---------- Content (JSON) ---------- */
+// meals.json and workouts.json are loaded once and cached.
+let contentPromise = null;
+function loadContent() {
+  if (!contentPromise) {
+    const get = (url) => fetch(url).then((res) => {
+      if (!res.ok) throw new Error(`Could not load ${url} (${res.status})`);
+      return res.json();
+    });
+    contentPromise = Promise.all([get('data/meals.json'), get('data/workouts.json')])
+      .then(([meals, workouts]) => ({ meals, workouts }));
+  }
+  return contentPromise;
+}
+
+// Results-page view state (not saved): which meal option is showing per slot, home toggle
+const view = { mealChoice: {}, atHome: false, day: 0 };
+
 /* ---------- Helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
@@ -189,7 +208,7 @@ function finishQuiz() {
 }
 
 /* ---------- Results ---------- */
-function renderResults() {
+async function renderResults() {
   const macros = calculateMacros(state.answers);
   const name = state.lead.firstName;
   $('#results-greeting').textContent = name ? `${name}, here's your plan` : "Here's your plan";
@@ -197,6 +216,14 @@ function renderResults() {
   renderIssue(getDiagnosis(state.answers));
   renderMacroCards(macros);
   renderDonut(macros);
+
+  try {
+    const content = await loadContent();
+    renderMeals(buildMealPlan(state.answers, macros), content.meals);
+  } catch (err) {
+    console.error(err);
+    $('#timeline').innerHTML = '<li class="callout warn">Sorry, the meal and training content could not load. Please refresh the page.</li>';
+  }
 }
 
 /* 1. Your Real Issue */
@@ -261,6 +288,95 @@ function renderDonut(m) {
     </div>`;
 }
 
+/* 3. Meal timing & what to eat */
+let mealPlan = null;
+let mealData = null;
+
+function renderMeals(plan, meals) {
+  mealPlan = plan;
+  mealData = meals;
+  const perMeal = plan.items.filter((i) => i.kind === 'meal' && i.role === 'main').map((i) => i.target.p);
+  const typical = perMeal.length ? Math.round(perMeal.reduce((a, b) => a + b, 0) / perMeal.length / 5) * 5 : 0;
+  $('#meals-intro').textContent = `${plan.intro} Aim for about ${typical} g of protein at each main meal.`;
+
+  let callouts = plan.callouts.map(renderCallout).join('');
+  if (plan.showGrabGo) {
+    const picks = mealOptions('grabgo').slice(0, 3).map((o) => o.name);
+    callouts += renderCallout({ type: 'info', title: 'Grab-and-go backups', body: 'For the days you know you’ll skip a meal, keep one of these on hand:', list: picks });
+  }
+  $('#meal-callouts').innerHTML = callouts;
+  $('#timeline').innerHTML = plan.items.map((item, idx) => renderTimelineItem(item, idx)).join('');
+}
+
+/** Options for a meal slot; "too busy" users only see the simple ones. */
+function mealOptions(slot) {
+  const all = (mealData && mealData.slots[slot]) || [];
+  const simple = all.filter((o) => o.simple);
+  return mealPlan && mealPlan.simpleOnly && simple.length ? simple : all;
+}
+
+function renderCallout(c) {
+  return `
+    <aside class="callout ${c.type === 'warn' ? 'warn' : ''}">
+      <h3>${esc(c.title)}</h3>
+      ${c.body ? `<p>${esc(c.body)}</p>` : ''}
+      ${c.list ? `<ul>${c.list.map((li) => `<li>${esc(li)}</li>`).join('')}</ul>` : ''}
+    </aside>`;
+}
+
+function renderTimelineItem(item, idx) {
+  if (item.kind === 'train') {
+    return `
+      <li class="tl-item train">
+        <div class="tl-card">
+          <div class="tl-time">${esc(item.time)}</div>
+          <h3 class="tl-name">${esc(item.name)}</h3>
+          ${item.note ? `<p class="tl-note">${esc(item.note)}</p>` : ''}
+        </div>
+      </li>`;
+  }
+  return `<li class="tl-item" id="meal-${idx}">${renderMealCard(item, idx)}</li>`;
+}
+
+function renderMealCard(item, idx) {
+  const options = mealOptions(item.slot);
+  const choice = currentChoice(idx) % Math.max(options.length, 1);
+  const scaled = options.length ? scaleMeal(options[choice], item.target) : null;
+  const pill = (label, value, color) => `<span class="pill"><span class="dot" style="background:${color}"></span>${label} ${value} g</span>`;
+  return `
+    <div class="tl-card">
+      <div class="tl-time">${esc(item.time)}</div>
+      <h3 class="tl-name">${esc(item.name)}</h3>
+      ${item.note ? `<p class="tl-note">${esc(item.note)}</p>` : ''}
+      ${scaled ? `
+        <p class="tl-option">${esc(scaled.name)}</p>
+        <ul class="tl-foods">${scaled.foods.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
+        <div class="tl-macros" aria-label="Approximate macros">
+          ${pill('Protein', scaled.macros.p, 'var(--c-protein)')}
+          ${pill('Carbs', scaled.macros.c, 'var(--c-carbs)')}
+          ${pill('Fat', scaled.macros.f, 'var(--c-fat)')}
+        </div>
+        ${scaled.topUp ? `<p class="tl-note">Top up: ${esc(scaled.topUp)}</p>` : ''}
+        ${options.length > 1 ? `<button type="button" class="btn btn-outline btn-small" data-action="next-meal" data-idx="${idx}">Try another option <span class="muted">(${choice + 1} of ${options.length})</span></button>` : ''}
+      ` : ''}
+    </div>`;
+}
+
+/** Which option a meal shows; repeat slots (e.g. two grab-and-go) start on different options. */
+function currentChoice(idx) {
+  if (idx in view.mealChoice) return view.mealChoice[idx];
+  const slot = mealPlan.items[idx].slot;
+  return mealPlan.items.slice(0, idx).filter((i) => i.slot === slot).length;
+}
+
+function nextMealOption(idx) {
+  const item = mealPlan.items[idx];
+  view.mealChoice[idx] = (currentChoice(idx) + 1) % mealOptions(item.slot).length;
+  const li = $(`#meal-${idx}`);
+  li.innerHTML = renderMealCard(item, idx);
+  $('[data-action="next-meal"]', li).focus();
+}
+
 /* ---------- Events ---------- */
 document.addEventListener('click', (event) => {
   const answer = event.target.closest('.answer');
@@ -276,8 +392,12 @@ document.addEventListener('click', (event) => {
     case 'back':
       goBack();
       break;
+    case 'next-meal':
+      nextMealOption(Number(actionEl.dataset.idx));
+      break;
     case 'retake':
       Object.assign(state, freshState());
+      view.mealChoice = {};
       showScreen('quiz');
       break;
     default:
