@@ -1,0 +1,318 @@
+{
+  "_readme": [
+    "Sample meals shown on the results page, grouped by meal slot.",
+    "Each option needs: name, simple (true = quick/no-cook, used for people who are 'too busy'), and foods.",
+    "Each food: item, amount, unit, role, and p / c / f = grams of protein / carbs / fat FOR THE AMOUNT LISTED.",
+    "role tells the app how to scale portions: 'protein', 'carb' or 'fat' foods are scaled to hit the person's targets; 'extra' foods (veggies, sauces) stay as written.",
+    "unit can be empty (\"\") for countable items; add 'plural' so '2 rice cakes' reads correctly.",
+    "Optional 'step' sets how portions are rounded (e.g. 0.5 for half an oz). Keep at least 3 options per slot."
+  ],
+  "slots": {
+    "breakfast": [
+      {
+        "name": "Greek yogurt power bowl",
+        "simple": true,
+        "foods": [
+          { "item": "plain nonfat Greek yogurt", "amount": 1, "unit": "cup", "role": "protein", "p": 23, "c": 9, "f": 0 },
+          { "item": "rolled oats", "amount": 0.5, "unit": "cup", "role": "carb", "p": 5, "c": 27, "f": 3 },
+          { "item": "mixed berries", "amount": 1, "unit": "cup", "role": "carb", "p": 1, "c": 15, "f": 0 },
+          { "item": "peanut butter", "amount": 1, "unit": "tbsp", "role": "fat", "p": 4, "c": 3, "f": 8 }
+        ]
+      },
+      {
+        "name": "Eggs, toast & avocado",
+        "simple": false,
+        "foods": [
+          { "item": "whole egg", "amount": 2, "unit": "", "plural": "whole eggs", "role": "protein", "p": 12, "c": 1, "f": 10 },
+          { "item": "liquid egg whites", "amount": 0.5, "unit": "cup", "role": "protein", "p": 13, "c": 1, "f": 0 },
+          { "item": "whole-grain toast", "amount": 2, "unit": "slice", "role": "carb", "p": 8, "c": 24, "f": 2 },
+          { "item": "avocado", "amount": 0.25, "unit": "", "role": "fat", "p": 1, "c": 4, "f": 7, "step": 0.25 },
+          { "item": "spinach and tomato", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 3, "f": 0 }
+        ]
+      },
+      {
+        "name": "Protein oats",
+        "simple": true,
+        "foods": [
+          { "item": "rolled oats", "amount": 0.5, "unit": "cup", "role": "carb", "p": 5, "c": 27, "f": 3 },
+          { "item": "whey protein, stirred in", "amount": 1, "unit": "scoop", "role": "protein", "p": 24, "c": 3, "f": 1.5 },
+          { "item": "banana, sliced", "amount": 0.5, "unit": "", "role": "carb", "p": 0.5, "c": 13.5, "f": 0, "step": 0.5 },
+          { "item": "peanut butter", "amount": 1, "unit": "tbsp", "role": "fat", "p": 4, "c": 3, "f": 8 }
+        ]
+      },
+      {
+        "name": "Make-ahead breakfast burrito",
+        "simple": false,
+        "foods": [
+          { "item": "liquid egg whites", "amount": 0.75, "unit": "cup", "role": "protein", "p": 20, "c": 1.5, "f": 0 },
+          { "item": "whole egg", "amount": 1, "unit": "", "plural": "whole eggs", "role": "protein", "p": 6, "c": 0.5, "f": 5 },
+          { "item": "large whole-wheat tortilla", "amount": 1, "unit": "", "plural": "large whole-wheat tortillas", "role": "carb", "p": 5, "c": 26, "f": 4 },
+          { "item": "shredded cheese", "amount": 1, "unit": "oz", "role": "fat", "p": 7, "c": 1, "f": 9 },
+          { "item": "salsa", "amount": 2, "unit": "tbsp", "role": "extra", "p": 0, "c": 2, "f": 0 }
+        ]
+      }
+    ],
+
+    "lunch": [
+      {
+        "name": "Chicken rice bowl",
+        "simple": false,
+        "foods": [
+          { "item": "grilled chicken breast", "amount": 4, "unit": "oz", "role": "protein", "p": 35, "c": 0, "f": 4 },
+          { "item": "cooked jasmine rice", "amount": 1, "unit": "cup", "role": "carb", "p": 4, "c": 45, "f": 0.5 },
+          { "item": "roasted vegetables", "amount": 1, "unit": "cup", "role": "extra", "p": 2, "c": 10, "f": 0 },
+          { "item": "olive oil", "amount": 1, "unit": "tsp", "role": "fat", "p": 0, "c": 0, "f": 4.5 }
+        ]
+      },
+      {
+        "name": "Turkey & hummus wrap",
+        "simple": true,
+        "foods": [
+          { "item": "sliced deli turkey", "amount": 4, "unit": "oz", "role": "protein", "p": 20, "c": 4, "f": 2 },
+          { "item": "large whole-wheat tortilla", "amount": 1, "unit": "", "plural": "large whole-wheat tortillas", "role": "carb", "p": 5, "c": 26, "f": 4 },
+          { "item": "hummus", "amount": 2, "unit": "tbsp", "role": "fat", "p": 2, "c": 4, "f": 5 },
+          { "item": "mixed greens", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 2, "f": 0 }
+        ]
+      },
+      {
+        "name": "Tuna, bean & avocado salad",
+        "simple": true,
+        "foods": [
+          { "item": "tuna in water, drained", "amount": 4, "unit": "oz", "role": "protein", "p": 26, "c": 0, "f": 1 },
+          { "item": "black beans, rinsed", "amount": 0.5, "unit": "cup", "role": "carb", "p": 7, "c": 20, "f": 0.5 },
+          { "item": "avocado", "amount": 0.25, "unit": "", "role": "fat", "p": 1, "c": 4, "f": 7, "step": 0.25 },
+          { "item": "mixed greens", "amount": 2, "unit": "cup", "role": "extra", "p": 2, "c": 4, "f": 0 }
+        ]
+      },
+      {
+        "name": "Steak & sweet potato",
+        "simple": false,
+        "foods": [
+          { "item": "sirloin steak", "amount": 4, "unit": "oz", "role": "protein", "p": 34, "c": 0, "f": 8 },
+          { "item": "baked sweet potato", "amount": 150, "unit": "g", "role": "carb", "p": 2, "c": 30, "f": 0 },
+          { "item": "green beans", "amount": 1, "unit": "cup", "role": "extra", "p": 2, "c": 8, "f": 0 }
+        ]
+      }
+    ],
+
+    "dinner": [
+      {
+        "name": "Salmon, rice & broccoli",
+        "simple": true,
+        "foods": [
+          { "item": "baked salmon", "amount": 4, "unit": "oz", "role": "protein", "p": 29, "c": 0, "f": 14 },
+          { "item": "cooked rice", "amount": 1, "unit": "cup", "role": "carb", "p": 4, "c": 45, "f": 0.5 },
+          { "item": "steamed broccoli", "amount": 1, "unit": "cup", "role": "extra", "p": 3, "c": 6, "f": 0 }
+        ]
+      },
+      {
+        "name": "Turkey taco bowl",
+        "simple": false,
+        "foods": [
+          { "item": "93% lean ground turkey", "amount": 4, "unit": "oz", "role": "protein", "p": 30, "c": 0, "f": 10 },
+          { "item": "cooked rice", "amount": 0.75, "unit": "cup", "role": "carb", "p": 3, "c": 34, "f": 0.5 },
+          { "item": "black beans", "amount": 0.25, "unit": "cup", "role": "carb", "p": 3.5, "c": 10, "f": 0 },
+          { "item": "shredded cheese", "amount": 0.5, "unit": "oz", "role": "fat", "p": 3.5, "c": 0.5, "f": 4.5 },
+          { "item": "salsa and lettuce", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 5, "f": 0 }
+        ]
+      },
+      {
+        "name": "Chicken marinara pasta",
+        "simple": false,
+        "foods": [
+          { "item": "chicken breast", "amount": 4, "unit": "oz", "role": "protein", "p": 35, "c": 0, "f": 4 },
+          { "item": "cooked pasta", "amount": 1, "unit": "cup", "role": "carb", "p": 8, "c": 43, "f": 1 },
+          { "item": "marinara sauce", "amount": 0.5, "unit": "cup", "role": "extra", "p": 2, "c": 10, "f": 2 },
+          { "item": "olive oil", "amount": 1, "unit": "tsp", "role": "fat", "p": 0, "c": 0, "f": 4.5 }
+        ]
+      },
+      {
+        "name": "Sheet-pan shrimp & potatoes",
+        "simple": true,
+        "foods": [
+          { "item": "shrimp", "amount": 5, "unit": "oz", "role": "protein", "p": 34, "c": 0, "f": 1.5 },
+          { "item": "baby potatoes", "amount": 200, "unit": "g", "role": "carb", "p": 4, "c": 34, "f": 0 },
+          { "item": "peppers and onions", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 9, "f": 0 },
+          { "item": "olive oil", "amount": 2, "unit": "tsp", "role": "fat", "p": 0, "c": 0, "f": 9 }
+        ]
+      }
+    ],
+
+    "preworkout": [
+      {
+        "name": "Banana + protein shake",
+        "simple": true,
+        "foods": [
+          { "item": "whey protein with water", "amount": 1, "unit": "scoop", "role": "protein", "p": 24, "c": 3, "f": 1.5 },
+          { "item": "banana", "amount": 1, "unit": "", "plural": "bananas", "role": "carb", "p": 1, "c": 27, "f": 0, "step": 0.5 }
+        ]
+      },
+      {
+        "name": "Greek yogurt & honey",
+        "simple": true,
+        "foods": [
+          { "item": "plain nonfat Greek yogurt", "amount": 1, "unit": "cup", "role": "protein", "p": 23, "c": 9, "f": 0 },
+          { "item": "honey", "amount": 1, "unit": "tbsp", "role": "carb", "p": 0, "c": 17, "f": 0 }
+        ]
+      },
+      {
+        "name": "Rice cakes & turkey",
+        "simple": true,
+        "foods": [
+          { "item": "rice cake", "amount": 2, "unit": "", "plural": "rice cakes", "role": "carb", "p": 2, "c": 14, "f": 0 },
+          { "item": "sliced deli turkey", "amount": 3, "unit": "oz", "role": "protein", "p": 15, "c": 3, "f": 1.5 },
+          { "item": "mustard", "amount": 1, "unit": "tsp", "role": "extra", "p": 0, "c": 0, "f": 0 }
+        ]
+      }
+    ],
+
+    "postworkout": [
+      {
+        "name": "Chicken, rice & veggies",
+        "simple": false,
+        "foods": [
+          { "item": "grilled chicken breast", "amount": 4, "unit": "oz", "role": "protein", "p": 35, "c": 0, "f": 4 },
+          { "item": "cooked rice", "amount": 1, "unit": "cup", "role": "carb", "p": 4, "c": 45, "f": 0.5 },
+          { "item": "roasted vegetables", "amount": 1, "unit": "cup", "role": "extra", "p": 2, "c": 10, "f": 0 }
+        ]
+      },
+      {
+        "name": "Protein shake & bagel",
+        "simple": true,
+        "foods": [
+          { "item": "whey protein with milk", "amount": 1, "unit": "scoop", "role": "protein", "p": 32, "c": 15, "f": 4 },
+          { "item": "whole-wheat bagel", "amount": 1, "unit": "", "plural": "whole-wheat bagels", "role": "carb", "p": 10, "c": 48, "f": 1.5, "step": 0.5 },
+          { "item": "jam", "amount": 1, "unit": "tbsp", "role": "extra", "p": 0, "c": 13, "f": 0 }
+        ]
+      },
+      {
+        "name": "Cottage cheese & pineapple bowl",
+        "simple": true,
+        "foods": [
+          { "item": "low-fat cottage cheese", "amount": 1, "unit": "cup", "role": "protein", "p": 28, "c": 6, "f": 5 },
+          { "item": "pineapple chunks", "amount": 1, "unit": "cup", "role": "carb", "p": 1, "c": 22, "f": 0 },
+          { "item": "rice cake", "amount": 2, "unit": "", "plural": "rice cakes", "role": "carb", "p": 2, "c": 14, "f": 0 }
+        ]
+      }
+    ],
+
+    "packed": [
+      {
+        "name": "Meal-prep burrito bowl",
+        "simple": false,
+        "foods": [
+          { "item": "grilled chicken breast", "amount": 4, "unit": "oz", "role": "protein", "p": 35, "c": 0, "f": 4 },
+          { "item": "cooked rice", "amount": 0.75, "unit": "cup", "role": "carb", "p": 3, "c": 34, "f": 0.5 },
+          { "item": "black beans", "amount": 0.5, "unit": "cup", "role": "carb", "p": 7, "c": 20, "f": 0.5 },
+          { "item": "guacamole", "amount": 2, "unit": "tbsp", "role": "fat", "p": 0.5, "c": 3, "f": 5 },
+          { "item": "salsa", "amount": 2, "unit": "tbsp", "role": "extra", "p": 0, "c": 2, "f": 0 }
+        ]
+      },
+      {
+        "name": "Tuna pasta salad",
+        "simple": false,
+        "foods": [
+          { "item": "tuna in water, drained", "amount": 4, "unit": "oz", "role": "protein", "p": 26, "c": 0, "f": 1 },
+          { "item": "cooked pasta", "amount": 1, "unit": "cup", "role": "carb", "p": 8, "c": 43, "f": 1 },
+          { "item": "olive oil", "amount": 1, "unit": "tsp", "role": "fat", "p": 0, "c": 0, "f": 4.5 },
+          { "item": "chopped veggies", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 6, "f": 0 }
+        ]
+      },
+      {
+        "name": "Protein bento box",
+        "simple": true,
+        "foods": [
+          { "item": "hard-boiled egg", "amount": 2, "unit": "", "plural": "hard-boiled eggs", "role": "protein", "p": 12, "c": 1, "f": 10 },
+          { "item": "sliced deli turkey", "amount": 3, "unit": "oz", "role": "protein", "p": 15, "c": 3, "f": 1.5 },
+          { "item": "apple", "amount": 1, "unit": "", "plural": "apples", "role": "carb", "p": 0.5, "c": 25, "f": 0, "step": 0.5 },
+          { "item": "whole-grain crackers", "amount": 1, "unit": "oz", "role": "carb", "p": 3, "c": 20, "f": 2.5 },
+          { "item": "almonds", "amount": 0.5, "unit": "oz", "role": "fat", "p": 3, "c": 3, "f": 7 }
+        ]
+      },
+      {
+        "name": "Turkey & hummus wrap",
+        "simple": true,
+        "foods": [
+          { "item": "sliced deli turkey", "amount": 4, "unit": "oz", "role": "protein", "p": 20, "c": 4, "f": 2 },
+          { "item": "large whole-wheat tortilla", "amount": 1, "unit": "", "plural": "large whole-wheat tortillas", "role": "carb", "p": 5, "c": 26, "f": 4 },
+          { "item": "hummus", "amount": 2, "unit": "tbsp", "role": "fat", "p": 2, "c": 4, "f": 5 },
+          { "item": "mixed greens", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 2, "f": 0 }
+        ]
+      }
+    ],
+
+    "grabgo": [
+      {
+        "name": "Protein shake + banana",
+        "simple": true,
+        "foods": [
+          { "item": "ready-to-drink protein shake (30 g protein)", "amount": 1, "unit": "bottle", "role": "protein", "p": 30, "c": 4, "f": 2.5 },
+          { "item": "banana", "amount": 1, "unit": "", "plural": "bananas", "role": "carb", "p": 1, "c": 27, "f": 0, "step": 0.5 }
+        ]
+      },
+      {
+        "name": "Jerky, cheese & apple",
+        "simple": true,
+        "foods": [
+          { "item": "beef jerky", "amount": 1.5, "unit": "oz", "role": "protein", "p": 14, "c": 5, "f": 1.5 },
+          { "item": "string cheese", "amount": 1, "unit": "stick", "role": "fat", "p": 7, "c": 1, "f": 5 },
+          { "item": "apple", "amount": 1, "unit": "", "plural": "apples", "role": "carb", "p": 0.5, "c": 25, "f": 0, "step": 0.5 }
+        ]
+      },
+      {
+        "name": "Greek yogurt cup + almonds",
+        "simple": true,
+        "foods": [
+          { "item": "single-serve Greek yogurt cup", "amount": 1, "unit": "", "plural": "single-serve Greek yogurt cups", "role": "protein", "p": 15, "c": 6, "f": 0 },
+          { "item": "almonds", "amount": 0.5, "unit": "oz", "role": "fat", "p": 3, "c": 3, "f": 7 },
+          { "item": "granola bar", "amount": 1, "unit": "", "plural": "granola bars", "role": "carb", "p": 2, "c": 18, "f": 4 }
+        ]
+      },
+      {
+        "name": "Protein bar + string cheese",
+        "simple": true,
+        "foods": [
+          { "item": "protein bar (20 g protein)", "amount": 1, "unit": "", "plural": "protein bars (20 g protein)", "role": "protein", "p": 20, "c": 22, "f": 8 },
+          { "item": "string cheese", "amount": 1, "unit": "stick", "role": "fat", "p": 7, "c": 1, "f": 5 }
+        ]
+      }
+    ],
+
+    "eveningSnack": [
+      {
+        "name": "Cottage cheese & berries",
+        "simple": true,
+        "foods": [
+          { "item": "low-fat cottage cheese", "amount": 0.75, "unit": "cup", "role": "protein", "p": 21, "c": 4.5, "f": 3.5 },
+          { "item": "mixed berries", "amount": 0.5, "unit": "cup", "role": "carb", "p": 0.5, "c": 7.5, "f": 0 }
+        ]
+      },
+      {
+        "name": "Greek yogurt & peanut butter",
+        "simple": true,
+        "foods": [
+          { "item": "plain nonfat Greek yogurt", "amount": 1, "unit": "cup", "role": "protein", "p": 23, "c": 9, "f": 0 },
+          { "item": "peanut butter, swirled in", "amount": 1, "unit": "tbsp", "role": "fat", "p": 4, "c": 3, "f": 8 },
+          { "item": "cinnamon", "amount": 1, "unit": "tsp", "role": "extra", "p": 0, "c": 0, "f": 0 }
+        ]
+      },
+      {
+        "name": "Protein hot cocoa",
+        "simple": true,
+        "foods": [
+          { "item": "chocolate protein powder", "amount": 1, "unit": "scoop", "role": "protein", "p": 24, "c": 3, "f": 1.5 },
+          { "item": "unsweetened almond milk, warmed", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 1, "f": 2.5 }
+        ]
+      },
+      {
+        "name": "Turkey & cheese roll-ups",
+        "simple": true,
+        "foods": [
+          { "item": "sliced deli turkey", "amount": 3, "unit": "oz", "role": "protein", "p": 15, "c": 3, "f": 1.5 },
+          { "item": "string cheese", "amount": 1, "unit": "stick", "role": "fat", "p": 7, "c": 1, "f": 5 },
+          { "item": "cucumber slices", "amount": 1, "unit": "cup", "role": "extra", "p": 1, "c": 4, "f": 0 }
+        ]
+      }
+    ]
+  }
+}

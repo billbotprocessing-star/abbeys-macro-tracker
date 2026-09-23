@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Find your macros in 60 seconds. Estimated calorie and macro targets, meal timing and a training plan built around your workday — by Thisisabbs.">
+  <meta name="theme-color" content="#1F1F1F">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F1F1F'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='%23F1EEEA'%3EA%3C/text%3E%3C/svg%3E">
+  <title>Abbey's Macro Tracker · Thisisabbs</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!--
+    Hidden static form so Netlify's build bot can detect the "macro-leads" form.
+    Every field the app submits must be listed here, or Netlify will drop it.
+    The visible email form (below) is submitted by js/app.js with fetch().
+  -->
+  <form name="macro-leads" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="text" name="first_name">
+    <input type="email" name="email">
+    <input type="text" name="goal">
+    <input type="text" name="weight">
+    <input type="text" name="activity">
+    <input type="text" name="struggle">
+    <input type="text" name="workday">
+    <input type="text" name="calories">
+    <input type="text" name="protein_g">
+    <input type="text" name="carbs_g">
+    <input type="text" name="fat_g">
+    <input type="text" name="bot-field">
+  </form>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <span class="brand">Thisisabbs</span>
+      <span class="brand-sub">Macro Calculator</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ 1. INTRO ============ -->
+    <section class="screen" id="screen-intro" data-screen="intro" aria-labelledby="intro-title">
+      <div class="wrap intro">
+        <p class="eyebrow">Free 5-question assessment</p>
+        <h1 id="intro-title" tabindex="-1">Find your macros in 60&nbsp;seconds</h1>
+        <p class="lead">Answer five quick questions and get your calorie and macro targets, a meal schedule that fits your workday, and a 3-day training plan.</p>
+        <button type="button" class="btn btn-primary btn-lg" data-action="start">Start</button>
+        <ul class="intro-points">
+          <li>No sign-up to start</li>
+          <li>Built around your real schedule</li>
+          <li>Plan you can use today</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 2. ASSESSMENT ============ -->
+    <section class="screen" id="screen-quiz" data-screen="quiz" hidden aria-labelledby="question-title">
+      <div class="wrap quiz">
+        <div class="progress">
+          <p class="progress-label" id="progress-label" aria-live="polite">Question 1 of 5</p>
+          <div class="progress-track" role="progressbar" aria-labelledby="progress-label" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+        <h2 id="question-title" class="question-title" tabindex="-1"></h2>
+        <div class="answers" id="answers" role="group" aria-labelledby="question-title"></div>
+        <button type="button" class="btn btn-ghost" data-action="back">&larr; Back</button>
+      </div>
+    </section>
+
+    <!-- ============ 3. EMAIL CAPTURE ============ -->
+    <section class="screen" id="screen-email" data-screen="email" hidden aria-labelledby="email-title">
+      <div class="wrap narrow">
+        <p class="eyebrow">Your plan is ready</p>
+        <h2 id="email-title" tabindex="-1">Where should we send your plan?</h2>
+        <p class="lead">We'll send your targets and plan to your inbox. You'll see everything on the next screen too.</p>
+        <form id="lead-form" class="lead-form" novalidate>
+          <p class="visually-hidden"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+          <div class="field">
+            <label for="first_name">First name</label>
+            <input id="first_name" name="first_name" type="text" autocomplete="given-name" required>
+            <p class="field-error" id="first_name-error" hidden>Please enter your first name.</p>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required>
+            <p class="field-error" id="email-error" hidden>Please enter a valid email address.</p>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Show my plan</button>
+          <p class="form-note">No spam. Unsubscribe anytime.</p>
+        </form>
+        <button type="button" class="btn btn-ghost" data-action="back">&larr; Back</button>
+      </div>
+    </section>
+
+    <!-- ============ 4. RESULTS ============ -->
+    <section class="screen" id="screen-results" data-screen="results" hidden aria-labelledby="results-title">
+      <div class="wrap results">
+        <p class="eyebrow" id="results-greeting">Your plan</p>
+        <h1 id="results-title" class="visually-hidden" tabindex="-1">Your results</h1>
+
+        <!-- 1. Your Real Issue (filled by diagnosis.js) -->
+        <article class="card issue" id="issue" aria-labelledby="issue-title"></article>
+
+        <!-- 2. Macro targets -->
+        <section class="block" aria-labelledby="macros-title">
+          <h2 id="macros-title">Your Macro Targets</h2>
+          <p class="muted">Estimated starting targets per day.</p>
+          <div class="macro-grid" id="macro-cards"></div>
+          <figure class="donut-wrap" id="macro-donut"></figure>
+        </section>
+
+        <!-- 3. Meal timing -->
+        <section class="block" aria-labelledby="meals-title">
+          <h2 id="meals-title">Your Meal Timing &amp; What to Eat</h2>
+          <p class="muted" id="meals-intro"></p>
+          <div id="meal-callouts"></div>
+          <ol class="timeline" id="timeline"></ol>
+        </section>
+
+        <!-- 4. Training -->
+        <section class="block" aria-labelledby="training-title">
+          <h2 id="training-title">Your Training Plan</h2>
+          <p class="training-header" id="training-header"></p>
+          <p class="muted" id="training-meta"></p>
+          <div class="home-toggle">
+            <span id="home-toggle-label">Training at home?</span>
+            <button type="button" class="switch" id="home-toggle" role="switch" aria-checked="false" aria-labelledby="home-toggle-label">
+              <span class="switch-thumb" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Training days" id="day-tabs"></div>
+          <div id="day-panels"></div>
+        </section>
+
+        <!-- 5. Discovery call -->
+        <section class="block cta" aria-labelledby="cta-title">
+          <p class="cta-why" id="cta-why" hidden></p>
+          <h2 id="cta-title">Want a plan built 100% around you?</h2>
+          <ul class="program-list">
+            <li>Custom macro targets recalculated every 2 weeks</li>
+            <li>Plate-based nutrition system</li>
+            <li>Training plan built around your schedule</li>
+            <li>Weekly check-ins</li>
+            <li>Results guaranteed <a href="guarantee.html">(see the guarantee)</a></li>
+          </ul>
+          <div id="calendly-slot"></div>
+        </section>
+
+        <div class="retake">
+          <button type="button" class="btn btn-secondary" data-action="retake">Retake assessment</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p><strong>Disclaimer:</strong> These numbers are estimates only and are not medical advice. Talk to your doctor before changing your diet or exercise, especially if you're pregnant, nursing, or have a medical condition.</p>
+      <p>&copy; <span id="year"></span> Thisisabbs</p>
+    </div>
+  </footer>
+
+  <!-- "Watch how" exercise modal -->
+  <div class="modal" id="video-modal" hidden>
+    <div class="modal-backdrop" data-action="close-modal"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button type="button" class="modal-close" data-action="close-modal" aria-label="Close">&times;</button>
+      <h2 id="modal-title" class="modal-title"></h2>
+      <div class="video-frame">
+        <video id="modal-video" muted loop playsinline preload="metadata" hidden></video>
+        <div class="video-placeholder" id="video-placeholder">
+          <span class="play-icon" aria-hidden="true"></span>
+          <span>Video coming soon</span>
+        </div>
+      </div>
+      <h3 class="cues-title">Form cues</h3>
+      <ul class="cues" id="modal-cues"></ul>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
